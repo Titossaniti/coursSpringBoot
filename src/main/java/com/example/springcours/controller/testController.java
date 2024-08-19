@@ -3,46 +3,59 @@ package com.example.springcours.controller;
 import com.example.springcours.model.Info;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+        import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path="/api",produces="application/json")
+@RequestMapping(path="/api", produces="application/json")
 @CrossOrigin(origins="*")
 public class testController {
-    @GetMapping("/test")
-    public ArrayList<String> getList(){
-        ArrayList<String> mylist = new ArrayList<String>();
-        mylist.add("A");
-        mylist.add("B");
-        mylist.add("C");
-        return mylist;
-    }
-    @GetMapping("/info")
-    public ArrayList<Info> Info(){
 
-        ArrayList<Info> infoList = new ArrayList<>();
+    private List<Info> InfoList() {
+        List<Info> infoList = new ArrayList<>();
 
-        Info test1 = new Info();
-        test1.setId("1");
-        test1.setName("Henry");
-        test1.setAge("25");
+        Info info1 = new Info();
+        info1.setId("1");
+        info1.setName("Henry");
+        info1.setAge("25");
 
-        Info test2 = new Info();
-        test2.setId("2");
-        test2.setName("Richard");
-        test2.setAge("58");
+        Info info2 = new Info();
+        info2.setId("2");
+        info2.setName("Richard");
+        info2.setAge("58");
 
-        infoList.add(test1);
-        infoList.add(test2);
+        Info info3 = new Info();
+        info3.setId("3");
+        info3.setName("Richard");
+        info3.setAge("34");
+
+        infoList.add(info1);
+        infoList.add(info2);
+        infoList.add(info3);
+
         return infoList;
     }
 
+    @GetMapping("/test")
+    public List<String> getList() {
+        return List.of("A", "B", "C");
+    }
+
+    @GetMapping("/info")
+    public List<Info> getAllInfo() {
+        return InfoList();
+    }
+
     @GetMapping("/info/{name}")
-    public Info getData(@PathVariable("name") String name){
-        Info info = new Info();
-        info.setId(name);
-        info.setName(name);
-        info.setAge(name);
-        return info;
+    public List<Info> getInfoByName(@PathVariable String name) {
+        List<Info> result = new ArrayList<>();
+        for (Info info : InfoList()) {
+            if (info.getName().equalsIgnoreCase(name)) {
+                result.add(info);
+            }
+        }
+
+        return result;
     }
 }
